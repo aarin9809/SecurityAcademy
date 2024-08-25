@@ -2,8 +2,12 @@ import pandas as pd
 import pyarrow
 import hashlib
 
-file1 = '/Users/seonyonglee/SecurityAcademy/MiniProject/mentoring1/sample_code/test.csv'
-file2 = '/Users/seonyonglee/SecurityAcademy/MiniProject/mentoring1/sample_code/5mSalesRecords.csv'
+'''
+file key+salt 2개 파일 merge, 2개 file chunk 방식 merge
+'''
+
+file1 = './key_index_to_csv.csv'
+file2 = './key_index_to_csv1.csv'
 
 def hash_key_with_salt(key, salt):
     return hashlib.sha256((key + salt).encode()).hexdigest()
@@ -14,8 +18,8 @@ def merge_files_with_encryption(file1, file2, key_column, salt):
     df2 = pd.read_csv(file2, encoding='iso-8859-1')
     
     # 키 컬럼을 암호화
-    df1['encrypted_key'] = df1[key_column].apply(lambda x: hash_key_with_salt(x, salt(x), salt))
-    df2['encrypted_key'] = df2[key_column].apply(lambda x: hash_key_with_salt(x, salt(x), salt))
+    df1['encrypted_key'] = df1[key_column].apply(lambda x: hash_key_with_salt(x, salt))
+    df2['encrypted_key'] = df2[key_column].apply(lambda x: hash_key_with_salt(x, salt))
 
     # 암호화된 키를 기반으로 파일 병합
     merged_df = pd.merge(df1, df2, on='encrypted_key')
@@ -26,5 +30,5 @@ def merge_files_with_encryption(file1, file2, key_column, salt):
     return merged_df
 
 
-merged_df = merge_files_with_encryption(file1, file2, key_column='ID', salt='s3cr3t')
+merged_df = merge_files_with_encryption(file1, file2, key_column='name', salt='s3cr3t')
 print(merged_df)
