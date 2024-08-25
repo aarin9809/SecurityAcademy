@@ -12,13 +12,12 @@ def main():
     df = pd.read_csv(testset_file, encoding="cp949")
     #dataframe 정보        
     df.info()
-          
+
     column_replace(df, '이름')
     column_mean(df, '신장')
     column_sum(df, '월소득')
     column_encrypt(df, '직업종류')
-   
-       
+
 
 def column_replace(df, column_name):
     print("replace data")
