@@ -1,34 +1,36 @@
 import pandas as pd
-import pyarrow
 import hashlib
 
-'''
-file key+salt 2개 파일 merge, 2개 file chunk 방식 merge
-'''
+# SHA256 암호화 함수 정의
+def encrypt_data_sha256(data):
+    sha_signature = hashlib.sha256(data.encode()).hexdigest()
+    return sha_signature
 
-file1 = './key_index_to_csv.csv'
-file2 = './key_index_to_csv1.csv'
+# 파일 경로 설정
+file1_path = './key_index_to_csv.csv'
+file2_path = './key_index_to_csv1.csv'
+output_path = './sha256_merged_file.csv'
 
-def hash_key_with_salt(key, salt):
-    return hashlib.sha256((key + salt).encode()).hexdigest()
-
-def merge_files_with_encryption(file1, file2, key_column, salt):
-    # 파일을 불러옴
-    df1 = pd.read_csv(file1, encoding='iso-8859-1')
-    df2 = pd.read_csv(file2, encoding='iso-8859-1')
+# chunk 단위로 데이터를 읽어서 처리 및 암호화
+chunk_size = 1000
+with pd.read_csv(file1_path, chunksize=chunk_size) as reader1, \
+     pd.read_csv(file2_path, chunksize=chunk_size) as reader2:
     
-    # 키 컬럼을 암호화
-    df1['encrypted_key'] = df1[key_column].apply(lambda x: hash_key_with_salt(x, salt))
-    df2['encrypted_key'] = df2[key_column].apply(lambda x: hash_key_with_salt(x, salt))
+    merged_chunks = []
+    
+    for chunk1, chunk2 in zip(reader1, reader2):
+        # 'name' 열을 SHA256으로 암호화
+        chunk1['name'] = chunk1['name'].apply(encrypt_data_sha256)
+        chunk2['name'] = chunk2['name'].apply(encrypt_data_sha256)
+        
+        # 두 chunk를 합치기
+        merged_chunk = pd.concat([chunk1, chunk2])
+        merged_chunks.append(merged_chunk)
 
-    # 암호화된 키를 기반으로 파일 병합
-    merged_df = pd.merge(df1, df2, on='encrypted_key')
+    # 전체를 하나의 데이터프레임으로 결합
+    final_df = pd.concat(merged_chunks)
 
-    # 원래 키 컬럼 제거(선택사항)
-    merged_df = merged_df.drop(columns=['encrypted_key', key_column + '_x', key_column + '_y'])
+# 결과를 CSV 파일로 저장
+final_df.to_csv(output_path, index=False)
 
-    return merged_df
-
-
-merged_df = merge_files_with_encryption(file1, file2, key_column='name', salt='s3cr3t')
-print(merged_df)
+print(f"파일이 성공적으로 병합되어 저장되었습니다: {output_path}")
