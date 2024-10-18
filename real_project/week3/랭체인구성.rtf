@@ -1,0 +1,52 @@
+{\rtf1\ansi\ansicpg949\cocoartf2818
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww13300\viewh13260\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 ollama \uc0\u49444 \u52824 \
+https://www.developerfastlane.com/blog/ollama-usage-guide\
+\
+\uc0\u47021 \u52404 \u51064  \u44396 \u49457 \
+https://dev-drive.tistory.com/41\
+https://velog.io/@kwon0koang/%EB%A1%9C%EC%BB%AC%EC%97%90%EC%84%9C-Llama3-%EB%8F%8C%EB%A6%AC%EA%B8%B0\
+https://wikidocs.net/book/14314\
+\
+\
+https://huggingface.co/teddylee777/Llama-3-Open-Ko-8B-gguf\
+\
+\uc0\u44032 \u51109 \u51089 \u51008  4bit \u50577 \u51088 \u54868  \u47784 \u45944  \u45796 \u50868 \u47196 \u46300  Q4_K_S (\u47700 \u47784 \u47532  16GB \u50640 \u49436  \u50868 \u50689 \u44032 \u45733 )\
+\
+Modelfile \uc0\u47564 \u46308 \u44592  \
+From \uc0\u50577 \u51088 \u54868  \u47784 \u45944  \u51060 \u47492 .gguf\
+TEMPLATE \'93\'94\'94\'85\'85.\
+\
+ollama create \uc0\u47784 \u45944 \u47749  -f Modelfile\
+ollama list \uc0\u54869 \u51064 \
+ollama run \uc0\u47784 \u45944 \u47749 \
+API \uc0\u47196 \u44536  \u52636 \u47141  \u54869 \u51064 \
+\
+Conda create -n xxx python=3.12 \uc0\u50640 \u49436  \u51089 \u50629 \
+\
+pip install langchain langchain_community\
+pip install fastapi\
+pip install langserve\
+pip install sse_starlette\
+\
+pip install langchain-cli\
+\
+langchain app new myApp - \uc0\u47021 \u52404 \u51064  \u54532 \u47196 \u51229 \u53944  \u47564 \u46308 \u44592 \
+\
+\uc0\u44592 \u48376  UI \u44396 \u49457  \u49368 \u54540  \u54869 \u51064 \
+\
+chain.py\
+server.py\
+\
+python server.py -> \uc0\u49444 \u51221 \u54620  localhost:8000/ollama/playground\
+\uc0\u54168 \u51060 \u51648 \u50640 \u49436  \u51656 \u47928  \u45813 \u48320  \u54869 \u51064 \
+\
+chain_test.py -> langchain \uc0\u51060 \u50857 \u54620  RAG \u54805 \u53468  \u50696 \u51228 \
+\
+\
+}
